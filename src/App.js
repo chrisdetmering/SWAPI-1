@@ -8,20 +8,35 @@ import React from 'react';
     //implying you should be able to more, but 10 at a time. 
   // There should be a single input element for searching a specific user
 
-let API = "http://swapi.dev/api/people/?page=1"
-
-
 
 class App extends React.Component{
   constructor(props){
     super(props)
     this.state = {
-      results:[]
+      search:'',
+      results:[],
+      api:"http://swapi.dev/api/people/?page=1"
     }
     this.getPlanets = this.getPlanets.bind(this);
     this.getSpecies = this.getSpecies.bind(this);
     this.getOtherData = this.getOtherData.bind(this);
-    
+    this.handleChange = this.handleChange.bind(this);
+    this.clearSearch = this.clearSearch.bind(this);
+
+  }
+
+  handleChange(event){
+    this.setState({search:event.target.value})
+    console.log(this.state.search);
+  }
+  clearSearch(){
+    this.setState({
+      search:'',
+      api:"http://swapi.dev/api/people/?page=1"
+    })
+    axios.get(this.state.api)
+    .then((response) => this.getOtherData(response.data.results))
+    console.log("called it")
   }
 
  getPlanets = async(character) =>{
@@ -49,19 +64,49 @@ class App extends React.Component{
 
   
   componentDidMount() {
-    axios.get(API)
+    axios.get(this.state.api)
     .then((response) => this.getOtherData(response.data.results))
   }
 
   render(){
 
     return (
-      <div className="App">
+      <div className="container">
         <header className="App-header">
           <h1>SWAPI</h1>
           <p>A New Hope</p>
         </header>
-        <section id="search"></section>
+
+        <section id="search" >
+          <form>
+            <div className="input-group mb-3">
+              <button 
+                className="btn btn-primary" 
+                type="button" 
+                id="button-addon1">
+                  Search
+              </button>
+              <button 
+                className="btn btn-secondary" 
+                type="button" 
+                id="button-addon1"
+                onClick={this.clearSearch}
+                >
+                  Clear
+              </button>
+
+              <input 
+                type="text" 
+                name="name"
+                className="form-control" 
+                placeholder="May the force be with you" aria-label="Example text with button addon" aria-describedby="button-addon1"
+                value={this.state.search}
+                onChange={this.handleChange}
+                >  
+              </input>
+            </div>
+          </form>
+        </section>
         <main>
           <table className="table table-striped table-dark table-hover" >
             <thead>
