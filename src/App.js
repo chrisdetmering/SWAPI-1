@@ -14,7 +14,7 @@ class App extends React.Component{
     super(props)
     this.state = {
       search:'',
-      results:[],
+      results:["placeholder"],
       peopleCall:[
         'http://swapi.dev/api/people/?page=1',
         'http://swapi.dev/api/people/?page=2',
