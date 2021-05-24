@@ -6,7 +6,7 @@ import React from 'react';
 // Deliverables
   // The table should be limit results to 10 characters at a time
     //implying you should be able to more, but 10 at a time. 
-  // There should be a single input element for searching a specific user
+
 
 
 class App extends React.Component{
@@ -15,7 +15,20 @@ class App extends React.Component{
     this.state = {
       search:'',
       results:[],
-      api:"http://swapi.dev/api/people/?page=1"
+      peopleCall:[
+        'http://swapi.dev/api/people/?page=1',
+        'http://swapi.dev/api/people/?page=2',
+        'http://swapi.dev/api/people/?page=3',
+        'http://swapi.dev/api/people/?page=4',
+        'http://swapi.dev/api/people/?page=5',
+        'http://swapi.dev/api/people/?page=6',
+        'http://swapi.dev/api/people/?page=7',
+        'http://swapi.dev/api/people/?page=8',
+        'http://swapi.dev/api/people/?page=9',
+        'http://swapi.dev/api/people/?page=10'
+      ],
+      api:"http://swapi.dev/api/people/?page=1",
+      error: "These aren't the droids you're looking for. Or anyone you are looking for, really. Try again."
     }
     this.getPlanets = this.getPlanets.bind(this);
     this.getSpecies = this.getSpecies.bind(this);
@@ -57,6 +70,9 @@ class App extends React.Component{
     }
   }
   getOtherData = async (characters) => {
+    if (characters.length === 0){
+      this.setState({results:[]})
+    }
     for (const character of characters) {
       await this.getPlanets(character);
       await this.getSpecies(character);
@@ -142,13 +158,24 @@ class App extends React.Component{
                     </tr>
                   )
                 })
-
               }
             </tbody>
           </table>
+          <p>{this.state.results.length === 0  ? this.state.error : ''}</p>
+          <nav></nav>
 
         </main>
-        <section id="pagination"></section>
+        <section id="pagination">
+          {/* <nav aria-label="Page navigation example">
+            <ul class="pagination">
+              <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+              <li class="page-item"><a class="page-link" href="#">1</a></li>
+              <li class="page-item"><a class="page-link" href="#">2</a></li>
+              <li class="page-item"><a class="page-link" href="#">3</a></li>
+              <li class="page-item"><a class="page-link" href="#">Next</a></li>
+            </ul>
+          </nav> */}
+        </section>
       </div>
     );
   }
