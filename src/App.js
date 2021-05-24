@@ -20,6 +20,8 @@ class App extends React.Component{
     this.getPlanets = this.getPlanets.bind(this);
     this.getSpecies = this.getSpecies.bind(this);
     this.getOtherData = this.getOtherData.bind(this);
+    this.getAPI = this.getAPI.bind(this);
+    this.userSearch = this.userSearch.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.clearSearch = this.clearSearch.bind(this);
 
@@ -27,16 +29,18 @@ class App extends React.Component{
 
   handleChange(event){
     this.setState({search:event.target.value})
-    console.log(this.state.search);
   }
   clearSearch(){
     this.setState({
       search:'',
       api:"http://swapi.dev/api/people/?page=1"
     })
-    axios.get(this.state.api)
-    .then((response) => this.getOtherData(response.data.results))
-    console.log("called it")
+    this.getAPI(this.state.api);
+  }
+
+  userSearch(){
+    let query = "http://swapi.dev/api/people/?search=" + this.state.search
+    this.getAPI(query);
   }
 
  getPlanets = async(character) =>{
@@ -61,11 +65,14 @@ class App extends React.Component{
       })
     }
   }
+  getAPI = (url) => {
+    axios.get(url)
+    .then((response) => this.getOtherData(response.data.results))
+  }
 
   
   componentDidMount() {
-    axios.get(this.state.api)
-    .then((response) => this.getOtherData(response.data.results))
+    this.getAPI(this.state.api)
   }
 
   render(){
@@ -83,7 +90,9 @@ class App extends React.Component{
               <button 
                 className="btn btn-primary" 
                 type="button" 
-                id="button-addon1">
+                id="button-addon1"
+                onClick={this.userSearch}
+                >
                   Search
               </button>
               <button 
@@ -121,9 +130,9 @@ class App extends React.Component{
             </thead>
             <tbody>
               {
-                this.state.results.map(function(result){
+                this.state.results.map(function(result, index){
                   return(
-                    <tr>
+                    <tr key={index}>
                       <td>{result.name}</td>
                       <td>{result.birth_year}</td>
                       <td>{result.height}</td>
