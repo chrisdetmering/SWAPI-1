@@ -2,19 +2,13 @@ import './App.css';
 import axios from 'axios';
 import React from 'react';
 
-//IN PROGRESS============
-// Deliverables
-  // The table should be limit results to 10 characters at a time
-    //implying you should be able to more, but 10 at a time. 
-
-
-
 class App extends React.Component{
   constructor(props){
     super(props)
     this.state = {
       search:'',
       results:["placeholder"],
+      currentIndex: 0,
       peopleCall:[
         'http://swapi.dev/api/people/?page=1',
         'http://swapi.dev/api/people/?page=2',
@@ -25,7 +19,6 @@ class App extends React.Component{
         'http://swapi.dev/api/people/?page=7',
         'http://swapi.dev/api/people/?page=8',
         'http://swapi.dev/api/people/?page=9',
-        'http://swapi.dev/api/people/?page=10'
       ],
       api:"http://swapi.dev/api/people/?page=1",
       error: "These aren't the droids you're looking for. Or anyone you are looking for, really. Try again."
@@ -46,7 +39,8 @@ class App extends React.Component{
   clearSearch(){
     this.setState({
       search:'',
-      api:"http://swapi.dev/api/people/?page=1"
+      api:"http://swapi.dev/api/people/?page=1",
+      currentIndex: 0,
     })
     this.getAPI(this.state.api);
   }
@@ -84,6 +78,31 @@ class App extends React.Component{
   getAPI = (url) => {
     axios.get(url)
     .then((response) => this.getOtherData(response.data.results))
+  }
+
+  prevPage = () =>{
+    if(this.state.currentIndex > 0 && this.state.results.length > 0){
+      this.setState({
+        currentIndex: this.state.currentIndex - 1
+      })
+      this.getAPI(this.state.peopleCall[this.state.currentIndex])
+    }
+  }
+
+  pageSelect = (url, number) => {
+     this.setState({
+       currentIndex: number
+     })
+     this.getAPI(url)
+  }
+
+  nextPage = (number) =>{
+    if(this.state.currentIndex < 8 && this.state.results.length > 0){
+      this.setState({
+        currentIndex: this.state.currentIndex + 1
+      })
+      this.getAPI(this.state.peopleCall[this.state.currentIndex])
+    }
   }
 
   
@@ -166,15 +185,40 @@ class App extends React.Component{
 
         </main>
         <section id="pagination">
-          {/* <nav aria-label="Page navigation example">
-            <ul class="pagination">
-              <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-              <li class="page-item"><a class="page-link" href="#">1</a></li>
-              <li class="page-item"><a class="page-link" href="#">2</a></li>
-              <li class="page-item"><a class="page-link" href="#">3</a></li>
-              <li class="page-item"><a class="page-link" href="#">Next</a></li>
+          <nav aria-label="Page navigation example">
+            <ul className="pagination">
+              <li 
+                className="page-item page-link"
+                onClick={this.prevPage}
+              >
+                Previous
+              </li>
+              {this.state.results.length !== 0 ? this.state.peopleCall.map((call, index) => {
+                return(
+                  <li
+                    key={index} 
+                    className="page-item page-link"
+                    onClick={() => this.pageSelect(call, index)}
+                  >
+                    {index+1}
+                  </li>
+                )
+              }) : 
+                <li
+                  className="page-item page-link"
+                >
+                  1
+                </li>
+              }
+              
+              <li 
+                className="page-item page-link"
+                onClick={this.nextPage}
+                >
+                  Next
+              </li>
             </ul>
-          </nav> */}
+          </nav>
         </section>
       </div>
     );
