@@ -1,6 +1,11 @@
 import './App.css';
 import axios from 'axios';
 import React from 'react';
+import Header from './components/Header.js';
+import Search from './components/Search.js';
+import Table from './components/Table.js';
+import Pagination from './components/Pagination.js';
+
 
 class App extends React.Component{
   constructor(props){
@@ -42,6 +47,7 @@ class App extends React.Component{
       api:"http://swapi.dev/api/people/?page=1",
       currentIndex: 0,
     })
+    if(this.state.api !== "http://swapi.dev/api/people/?page=1" || this.state.results.length === 0)
     this.getAPI(this.state.api);
   }
 
@@ -114,112 +120,24 @@ class App extends React.Component{
 
     return (
       <div className="container">
-        <header className="App-header">
-          <h1>SWAPI</h1>
-          <p>A New Hope</p>
-        </header>
-
-        <section id="search" >
-          <form>
-            <div className="input-group mb-3">
-              <button 
-                className="btn btn-primary" 
-                type="button" 
-                id="button-addon1"
-                onClick={this.userSearch}
-                >
-                  Search
-              </button>
-              <button 
-                className="btn btn-secondary" 
-                type="button" 
-                id="button-addon1"
-                onClick={this.clearSearch}
-                >
-                  Clear
-              </button>
-
-              <input 
-                type="text" 
-                name="name"
-                className="form-control" 
-                placeholder="May the force be with you" aria-label="Example text with button addon" aria-describedby="button-addon1"
-                value={this.state.search}
-                onChange={this.handleChange}
-                >  
-              </input>
-            </div>
-          </form>
-        </section>
-        <main>
-          <table className="table table-striped table-dark table-hover" >
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Birth date</th>
-                <th>Height</th>
-                <th>Mass</th>
-                <th>Homeworld</th>
-                <th>Species</th>
-              </tr>
-            </thead>
-            <tbody>
-              {
-                this.state.results.map(function(result, index){
-                  return(
-                    <tr key={index}>
-                      <td>{result.name}</td>
-                      <td>{result.birth_year}</td>
-                      <td>{result.height}</td>
-                      <td>{result.mass}</td>
-                      <td>{result.homeworld}</td>
-                      <td>{result.species}</td>
-                    </tr>
-                  )
-                })
-              }
-            </tbody>
-          </table>
-          <p>{this.state.results.length === 0  ? this.state.error : ''}</p>
-          <nav></nav>
-
-        </main>
-        <section id="pagination">
-          <nav aria-label="Page navigation example">
-            <ul className="pagination">
-              <li 
-                className="page-item page-link"
-                onClick={this.prevPage}
-              >
-                Previous
-              </li>
-              {this.state.results.length !== 0 ? this.state.peopleCall.map((call, index) => {
-                return(
-                  <li
-                    key={index} 
-                    className="page-item page-link"
-                    onClick={() => this.pageSelect(call, index)}
-                  >
-                    {index+1}
-                  </li>
-                )
-              }) : 
-                <li
-                  className="page-item page-link"
-                >
-                  1
-                </li>
-              }
-              
-              <li 
-                className="page-item page-link"
-                onClick={this.nextPage}
-                >
-                  Next
-              </li>
-            </ul>
-          </nav>
-        </section>
+        <Header/>
+        <Search 
+          value={this.state.search}
+          userSearch={this.userSearch}
+          clearSearch={this.clearSearch}
+          handleChange={this.handleChange}
+        />
+        <Table
+          results={this.state.results}
+        />          
+        <p>{this.state.results.length === 0  ? this.state.error : ''}</p>
+        <Pagination 
+          prevPage = {this.prevPage}
+          results = {this.state.results}
+          peopleCall = {this.state.peopleCall}
+          pageSelect = {this.pageSelect}
+          nextPage = {this.nextPage}
+        />
       </div>
     );
   }
