@@ -5,7 +5,6 @@ import Header from './components/Header.js';
 import Search from './components/Search.js';
 import Table from './components/Table.js';
 import Pagination from './components/Pagination.js';
-//..
 
 class App extends React.Component{
   constructor(props){
@@ -15,17 +14,17 @@ class App extends React.Component{
       results:["placeholder"],
       currentIndex: 0,
       peopleCall:[
-        'http://swapi.dev/api/people/?page=1',
-        'http://swapi.dev/api/people/?page=2',
-        'http://swapi.dev/api/people/?page=3',
-        'http://swapi.dev/api/people/?page=4',
-        'http://swapi.dev/api/people/?page=5',
-        'http://swapi.dev/api/people/?page=6',
-        'http://swapi.dev/api/people/?page=7',
-        'http://swapi.dev/api/people/?page=8',
-        'http://swapi.dev/api/people/?page=9',
+        'https://swapi.dev/api/people/?page=1',
+        'https://swapi.dev/api/people/?page=2',
+        'https://swapi.dev/api/people/?page=3',
+        'https://swapi.dev/api/people/?page=4',
+        'https://swapi.dev/api/people/?page=5',
+        'https://swapi.dev/api/people/?page=6',
+        'https://swapi.dev/api/people/?page=7',
+        'https://swapi.dev/api/people/?page=8',
+        'https://swapi.dev/api/people/?page=9',
       ],
-      api:"http://swapi.dev/api/people/?page=1",
+      api:"https://swapi.dev/api/people/?page=1",
       error: "These aren't the droids you're looking for. Or anyone you are looking for, really. Try again."
     }
     this.getPlanets = this.getPlanets.bind(this);
@@ -44,15 +43,15 @@ class App extends React.Component{
   clearSearch(){
     this.setState({
       search:'',
-      api:"http://swapi.dev/api/people/?page=1",
+      api:"https://swapi.dev/api/people/?page=1",
       currentIndex: 0,
     })
-    if(this.state.api !== "http://swapi.dev/api/people/?page=1" || this.state.results.length === 0)
+    if(this.state.api !== "https://swapi.dev/api/people/?page=1" || this.state.results.length === 0)
     this.getAPI(this.state.api);
   }
 
   userSearch(){
-    let query = "http://swapi.dev/api/people/?search=" + this.state.search
+    let query = "https://swapi.dev/api/people/?search=" + this.state.search
     this.getAPI(query);
   }
 
