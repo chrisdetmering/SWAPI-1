@@ -5,7 +5,7 @@ import Header from './components/Header.js';
 import Search from './components/Search.js';
 import Table from './components/Table.js';
 import Pagination from './components/Pagination.js';
-
+//..
 
 class App extends React.Component{
   constructor(props){
