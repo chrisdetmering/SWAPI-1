@@ -55,8 +55,8 @@ class App extends React.Component{
     this.getAPI(query);
   }
 
- getPlanets = async(character) =>{
-    const planet = character.homeworld;
+  getPlanets = async(character) =>{
+    const planet = String(character.homeworld).replace("http", "https");
     const response = await axios.get(planet);
     character.homeworld = response.data.name
   }
@@ -64,7 +64,7 @@ class App extends React.Component{
     if(character.species.length === 0){
       character.species = "Human";
     } else {
-      const response = await axios.get(character.species);
+      const response = await axios.get(String(character.species).replace("http", "https"));
       character.species = response.data.name
     }
   }
